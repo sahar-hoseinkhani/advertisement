@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="interstitialAdUnitID">interstitialAdUnitID</string>
-    <string name="nativeAdUnitId">nativeAdUnitId</string>
-    <string name="bannerAdUnitId">bannerAdUnitId</string>
-    <string name="appKey">appKey</string>
+<!--    <string name="interstitialAdUnitID">interstitialAdUnitId</string>-->
+<!--    <string name="nativeAdUnitId">nativeAdUnitId</string>-->
+<!--    <string name="bannerAdUnitId">bannerAdUnitId</string>-->
+<!--    <string name="appKey">appKey</string>-->
 </resources>

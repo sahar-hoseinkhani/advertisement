@@ -105,19 +105,19 @@ object AdvertisementCore {
         viewGroup.addView(adView)
         adView.setBannerAdListener(
             simplifiedNativeAndBannerAdListener(
-                onAdLoaded,
                 onAdClicked,
                 onAdShown,
-                onError
+                onError,
+                onAdLoaded
             )
         )
     }
 
     private fun simplifiedNativeAndBannerAdListener(
-        onAdLoaded: SimpleCallback?,
         onAdClicked: SimpleCallback?,
         onAdShown: SimpleCallback?,
         onAdError: StringCallback?,
+        onAdLoaded: SimpleCallback?,
     ) = object : AdiveryAdListener() {
         override fun onAdLoaded() {
             onAdLoaded?.invoke()
@@ -154,8 +154,8 @@ object AdvertisementCore {
             simplifiedNativeAndBannerAdListener(
                 onAdClicked,
                 onAdShown,
-                onAdLoaded,
-                onError
+                onError,
+                onAdLoaded
             )
         )
         adiveryNativeAdView.loadAd()

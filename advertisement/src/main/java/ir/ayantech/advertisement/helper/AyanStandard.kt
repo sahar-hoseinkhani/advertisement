@@ -1,10 +1,6 @@
 package ir.ayantech.advertisement.helper
 
-import com.adivery.sdk.NativeAd
-
 typealias SimpleCallback = () -> Unit
-
-typealias YektanetNativeAdCallBack = (NativeAd) -> Unit
 
 typealias StringCallback = (String) -> Unit
 
