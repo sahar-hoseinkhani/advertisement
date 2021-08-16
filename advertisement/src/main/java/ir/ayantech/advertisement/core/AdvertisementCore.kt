@@ -4,17 +4,27 @@ import android.app.Application
 import android.content.Context
 import android.view.ViewGroup
 import com.adivery.sdk.*
-import ir.ayantech.advertisement.helper.AdvertisementIdHelper
-import ir.ayantech.advertisement.helper.SimpleCallback
-import ir.ayantech.advertisement.helper.StringCallback
-import ir.ayantech.advertisement.helper.TwoStringCallback
+import ir.ayantech.advertisement.helper.*
 
 object AdvertisementCore {
+//    var appKey: String = ""
+    var interstitialAdUnitID: String = ""
+    var bannerAdUnitID: String = ""
+    var nativeAdUnitID: String = ""
+
 
     fun initialize(
-        application: Application
+        application: Application,
+        appKey: String,
+        interstitialAdUnitID: String,
+        bannerAdUnitID: String,
+        nativeAdUnitID: String,
     ) {
-        Adivery.configure(application, AdvertisementIdHelper.getAppKey(application))
+//        this.appKey = appKey
+        this.interstitialAdUnitID = interstitialAdUnitID
+        this.bannerAdUnitID = bannerAdUnitID
+        this.nativeAdUnitID = nativeAdUnitID
+        Adivery.configure(application, appKey)
     }
 
     fun requestInterstitialAds(
@@ -27,10 +37,8 @@ object AdvertisementCore {
         onAdError: TwoStringCallback? = null,
     ) {
         //one time call is enough. adivery will prepare next ad after showing current ad automatically
-        Adivery.prepareInterstitialAd(
-            context,
-            customAdUnit ?: AdvertisementIdHelper.getInterstitialAdUnitId(context)
-        )
+        Adivery.prepareInterstitialAd(context, customAdUnit ?: interstitialAdUnitID)
+
         Adivery.addListener(
             simplifiedInterstitialAdListener(
                 onAdLoaded,
@@ -74,9 +82,9 @@ object AdvertisementCore {
         context: Context,
         customAdUnit: String? = null
     ) {
-        if (Adivery.isLoaded(customAdUnit ?: AdvertisementIdHelper.getInterstitialAdUnitId(context))
+        if (Adivery.isLoaded(customAdUnit ?: interstitialAdUnitID)
         ) {
-            Adivery.showAd(customAdUnit ?: AdvertisementIdHelper.getInterstitialAdUnitId(context))
+            Adivery.showAd(customAdUnit ?: interstitialAdUnitID)
         }
     }
 
@@ -91,7 +99,7 @@ object AdvertisementCore {
         onError: StringCallback? = null
     ) {
         val adView = AdiveryBannerAdView(context)
-        adView.setPlacementId(customAdUnit ?: AdvertisementIdHelper.getBannerAdUnitId(context))
+        adView.setPlacementId(customAdUnit ?: bannerAdUnitID)
         adView.setBannerSize(bannerSize ?: BannerSize.BANNER)
         adView.loadAd()
         viewGroup.addView(adView)
@@ -128,7 +136,6 @@ object AdvertisementCore {
         }
     }
 
-
     fun requestNativeAds(
         context: Context,
         layoutId: Int,
@@ -140,7 +147,7 @@ object AdvertisementCore {
     ): AdiveryNativeAdView {
         val adiveryNativeAdView = AdiveryNativeAdView(context)
         adiveryNativeAdView.setPlacementId(
-            customAdUnit ?: AdvertisementIdHelper.getNativeAdUnitId(context)
+            customAdUnit ?: nativeAdUnitID
         )
         adiveryNativeAdView.setNativeAdLayout(layoutId)
         adiveryNativeAdView.setListener(
