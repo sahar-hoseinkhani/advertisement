@@ -7,7 +7,6 @@ import com.adivery.sdk.*
 import ir.ayantech.advertisement.helper.*
 
 object AdvertisementCore {
-//    var appKey: String = ""
     var interstitialAdUnitID: String = ""
     var bannerAdUnitID: String = ""
     var nativeAdUnitID: String = ""
@@ -20,7 +19,6 @@ object AdvertisementCore {
         bannerAdUnitID: String,
         nativeAdUnitID: String,
     ) {
-//        this.appKey = appKey
         this.interstitialAdUnitID = interstitialAdUnitID
         this.bannerAdUnitID = bannerAdUnitID
         this.nativeAdUnitID = nativeAdUnitID
@@ -34,7 +32,7 @@ object AdvertisementCore {
         onAdClicked: StringCallback? = null,
         onAdShown: StringCallback? = null,
         onAdClosed: StringCallback? = null,
-        onAdError: TwoStringCallback? = null,
+        onAdError: TwoStringCallback? = null
     ) {
         //one time call is enough. adivery will prepare next ad after showing current ad automatically
         Adivery.prepareInterstitialAd(context, customAdUnit ?: interstitialAdUnitID)
@@ -80,12 +78,27 @@ object AdvertisementCore {
 
     fun showInterstitialAds(
         context: Context,
-        customAdUnit: String? = null
+        customAdUnit: String? = null,
+        onAdLoaded: StringCallback? = null,
+        onAdClicked: StringCallback? = null,
+        onAdShown: StringCallback? = null,
+        onAdClosed: StringCallback? = null,
+        onAdError: TwoStringCallback? = null
     ) {
         if (Adivery.isLoaded(customAdUnit ?: interstitialAdUnitID)
         ) {
             Adivery.showAd(customAdUnit ?: interstitialAdUnitID)
         }
+
+        Adivery.addListener(
+            simplifiedInterstitialAdListener(
+                onAdLoaded,
+                onAdClicked,
+                onAdShown,
+                onAdClosed,
+                onAdError
+            )
+        )
     }
 
     fun requestBannerAds(
@@ -98,6 +111,7 @@ object AdvertisementCore {
         onAdShown: SimpleCallback? = null,
         onError: StringCallback? = null
     ) {
+        viewGroup.removeAllViews()
         val adView = AdiveryBannerAdView(context)
         adView.setPlacementId(customAdUnit ?: bannerAdUnitID)
         adView.setBannerSize(bannerSize ?: BannerSize.BANNER)
@@ -146,10 +160,10 @@ object AdvertisementCore {
         onAdLoaded: SimpleCallback? = null,
     ): AdiveryNativeAdView {
         val adiveryNativeAdView = AdiveryNativeAdView(context)
+        adiveryNativeAdView.setNativeAdLayout(layoutId)
         adiveryNativeAdView.setPlacementId(
             customAdUnit ?: nativeAdUnitID
         )
-        adiveryNativeAdView.setNativeAdLayout(layoutId)
         adiveryNativeAdView.setListener(
             simplifiedNativeAndBannerAdListener(
                 onAdClicked,
