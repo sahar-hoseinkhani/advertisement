@@ -77,7 +77,6 @@ object AdvertisementCore {
     }
 
     fun showInterstitialAds(
-        context: Context,
         customAdUnit: String? = null,
         onAdLoaded: StringCallback? = null,
         onAdClicked: StringCallback? = null,
