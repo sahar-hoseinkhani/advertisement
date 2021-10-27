@@ -37,7 +37,7 @@ object AdvertisementCore {
         //one time call is enough. adivery will prepare next ad after showing current ad automatically
         Adivery.prepareInterstitialAd(context, customAdUnit ?: interstitialAdUnitID)
 
-        Adivery.addListener(
+        Adivery.addGlobalListener(
             simplifiedInterstitialAdListener(
                 onAdLoaded,
                 onAdClicked,
@@ -53,7 +53,7 @@ object AdvertisementCore {
         onAdClicked: StringCallback?,
         onAdShown: StringCallback?,
         onAdClosed: StringCallback?,
-        onAdError: TwoStringCallback?,
+        logCallback: TwoStringCallback?,
     ) = object : AdiveryListener() {
         override fun onInterstitialAdLoaded(placementId: String) {
             onAdLoaded?.invoke(placementId)
@@ -71,8 +71,8 @@ object AdvertisementCore {
             onAdShown?.invoke(placementId)
         }
 
-        override fun onError(placementId: String, reason: String) {
-            onAdError?.invoke(placementId, reason)
+        override fun log(placementId: String, message: String) {
+            logCallback?.invoke(placementId, message)
         }
     }
 
@@ -82,20 +82,20 @@ object AdvertisementCore {
         onAdClicked: StringCallback? = null,
         onAdShown: StringCallback? = null,
         onAdClosed: StringCallback? = null,
-        onAdError: TwoStringCallback? = null
+        logCallback: TwoStringCallback? = null
     ) {
         if (Adivery.isLoaded(customAdUnit ?: interstitialAdUnitID)
         ) {
             Adivery.showAd(customAdUnit ?: interstitialAdUnitID)
         }
 
-        Adivery.addListener(
+        Adivery.addGlobalListener(
             simplifiedInterstitialAdListener(
                 onAdLoaded,
                 onAdClicked,
                 onAdShown,
                 onAdClosed,
-                onAdError
+                logCallback
             )
         )
     }
@@ -144,8 +144,8 @@ object AdvertisementCore {
             onAdShown?.invoke()
         }
 
-        override fun onError(reason: String?) {
-            reason?.let { onAdError?.invoke(it) }
+        override fun onError(reason: String) {
+            onAdError?.invoke(reason)
         }
     }
 
