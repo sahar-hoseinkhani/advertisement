@@ -159,19 +159,21 @@ object AdvertisementCore {
         onAdLoaded: SimpleCallback? = null,
     ): AdiveryNativeAdView {
         val adiveryNativeAdView = AdiveryNativeAdView(context)
-        adiveryNativeAdView.setNativeAdLayout(layoutId)
-        adiveryNativeAdView.setPlacementId(
-            customAdUnit ?: nativeAdUnitID
-        )
-        adiveryNativeAdView.setListener(
-            simplifiedNativeAndBannerAdListener(
-                onAdClicked,
-                onAdShown,
-                onError,
-                onAdLoaded
+        trying {
+            adiveryNativeAdView.setNativeAdLayout(layoutId)
+            adiveryNativeAdView.setPlacementId(
+                customAdUnit ?: nativeAdUnitID
             )
-        )
-        adiveryNativeAdView.loadAd()
+            adiveryNativeAdView.setListener(
+                simplifiedNativeAndBannerAdListener(
+                    onAdClicked,
+                    onAdShown,
+                    onError,
+                    onAdLoaded
+                )
+            )
+            adiveryNativeAdView.loadAd()
+        }
         return adiveryNativeAdView
     }
 }
